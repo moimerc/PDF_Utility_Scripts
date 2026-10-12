@@ -15,14 +15,14 @@ Uses `PyMuPDF` to extract embedded images from PDF files in their original forma
 ### `convert_image.py`
 A multiprocessing batch converter that uses `FFmpeg` to convert image formats. It can be easily modified to support other formats by changing the input and output extension variables.
 
-### `png2pdf.py`
-Compiles a sequential list of images into a single PDF document. It applies a grayscale conversion (`convert('L')` via `Pillow`) to the images before merging them.
+### `img2pdf.py`
+Compiles a sequential list of images into a single PDF document. It applies a grayscale conversion (`convert('L')` via `Pillow`) to the images before merging them. Additionally, it uses `PyMuPDF` to set the default viewer layout to 'Single Page' (continuous scrolling OFF), optimizing the document for reading sheet music page-by-page on large-screen tablets.
 
 ## Requirements
 
 - Python 3.x
-- `PyMuPDF` (for `pdf2img.py`)
-- `Pillow` (for `png2pdf.py`)
+- `PyMuPDF` (for `pdf2img.py` and `img2pdf.py`)
+- `Pillow` (for `img2pdf.py`)
 - `FFmpeg` installed and added to system PATH (for `convert_image.py`)
 
 ```bash
@@ -35,7 +35,7 @@ Before running the scripts, open them in a text editor and update the directory 
 
 1. **`pdf2img.py`**: Update `pdf_file` (input PDF path) and `output_folder` (where extracted images will be saved).
 2. **`convert_image.py`**: Update `INPUT_EXT`, `OUTPUT_EXT`, and `folder_path` to point to the directory containing your target images.
-3. **`png2pdf.py`**: Update `TARGET_DIR` (directory containing your images), `FILE_PREFIX` (e.g., "page"), `TOTAL_PAGES`, `EXTENSION` (e.g., "png"), and `OUTPUT_FILE` (final PDF path).
+3. **`img2pdf.py`**: Update `TARGET_DIR` (directory containing your images), `FILE_PREFIX` (leave empty for 1, 2, 3...), `EXTENSION` (e.g., "png"), and `OUTPUT_FILE` (final PDF path).
 
 Run the desired script from the terminal:
 
@@ -51,5 +51,5 @@ python convert_image.py
 
 **To compile images into a grayscale PDF:**
 ```bash
-python png2pdf.py
+python img2pdf.py
 ```
