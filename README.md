@@ -1,29 +1,31 @@
 # PDF Utility Scripts
 
-## Script Overview
-This repository contains Python utility scripts for specific PDF and image processing tasks: extracting raw image bytes from PDFs, and compiling sequential image files into a single grayscale PDF.
+## Overview
+Python utilities for PDF and image processing: extracting embedded images from PDFs without re-encoding (`pdf2img.py`), batch-converting image formats via FFmpeg (`convert_image.py`), and compiling sequential images into a grayscale PDF (`img2pdf.py`).
 
-## Primary Use Cases
-- **Raw Image Extraction**: Extracting unaltered original images from PDF documents without re-encoding.
-- **Grayscale PDF Compilation**: Converting and merging scanned images or screenshots into a grayscale PDF. It can be used to bind multi-page music scores.
+## Use Cases
+- **Raw image extraction**: Pull original images out of a PDF.
+- **Batch image conversion**: Convert a folder of images from one format to another (e.g. JPX → PNG).
+- **Grayscale PDF compilation**: Merge scanned images or screenshots into a single grayscale PDF, useful for assembling multi-page sheet music.
 
-## Tool Descriptions
+## Scripts
 
 ### `pdf2img.py`
-Uses `PyMuPDF` to extract embedded images from PDF files in their original format.
+Extracts embedded images from PDF files in their original format using `PyMuPDF`.
 
 ### `convert_image.py`
-A multiprocessing batch converter that uses `FFmpeg` to convert image formats. It can be easily modified to support other formats by changing the input and output extension variables.
+A multiprocessing batch converter built on `FFmpeg`. Change the input/output extension variables to support other formats. An optional `PIX_FMT` setting controls the output bit depth (e.g. `rgb24` for 8-bit PNG).
 
 ### `img2pdf.py`
-Compiles a sequential list of images into a single PDF document. It applies a grayscale conversion (`convert('L')` via `Pillow`) to the images before merging them. Additionally, it uses `PyMuPDF` to set the default viewer layout to 'Single Page' (continuous scrolling OFF), optimizing the document for reading sheet music page-by-page on large-screen tablets.
+Compiles a sequential list of images into a single PDF, converting to grayscale (`convert('L')` via `Pillow`) before merging. Also sets the default viewer layout to 'Single Page' (continuous scrolling off) via `PyMuPDF`, which works well for reading sheet music page-by-page on a tablet.
 
 ## Requirements
-
 - Python 3.x
-- `PyMuPDF` (for `pdf2img.py` and `img2pdf.py`)
+- `PyMuPDF` (for `pdf2img.py`, `img2pdf.py`)
 - `Pillow` (for `img2pdf.py`)
-- `FFmpeg` installed and added to system PATH (for `convert_image.py`)
+- `FFmpeg` in PATH (for `convert_image.py`)
+
+Install the Python dependencies:
 
 ```bash
 pip install pymupdf Pillow
@@ -31,25 +33,16 @@ pip install pymupdf Pillow
 
 ## Usage
 
-Before running the scripts, open them in a text editor and update the directory paths in the configuration sections to point to your local files.
+Edit the configuration block at the top of each script to point to your local files.
 
-1. **`pdf2img.py`**: Update `pdf_file` (input PDF path) and `output_folder` (where extracted images will be saved).
-2. **`convert_image.py`**: Update `INPUT_EXT`, `OUTPUT_EXT`, and `folder_path` to point to the directory containing your target images.
-3. **`img2pdf.py`**: Update `TARGET_DIR` (directory containing your images), `FILE_PREFIX` (leave empty for 1, 2, 3...), `EXTENSION` (e.g., "png"), and `OUTPUT_FILE` (final PDF path).
+1. **`pdf2img.py`** — set `pdf_file` and `output_folder`.
+2. **`convert_image.py`** — set `INPUT_EXT`, `OUTPUT_EXT`, and `folder_path`. Optionally set `PIX_FMT` (leave empty to keep the source bit depth).
+3. **`img2pdf.py`** — set `TARGET_DIR`, `FILE_PREFIX` (leave empty for 1, 2, 3...), `EXTENSION` (e.g. `"png"`), and `OUTPUT_FILE`.
 
-Run the desired script from the terminal:
+Then run:
 
-**To extract raw images from a PDF:**
 ```bash
-python pdf2img.py
-```
-
-**To batch convert image formats:**
-```bash
-python convert_image.py
-```
-
-**To compile images into a grayscale PDF:**
-```bash
-python img2pdf.py
+python pdf2img.py        # Extract raw images from a PDF
+python convert_image.py  # Batch-convert image formats
+python img2pdf.py        # Compile images into a grayscale PDF
 ```
